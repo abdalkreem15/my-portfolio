@@ -1,0 +1,15 @@
+// .vscode/settings.json
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode", // Set Prettier as the default formatter
+    "editor.formatOnSave": true,                       // Auto-format on save
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"             // Auto-fix ESLint issues on save
+    },
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+        "svelte"                                       // Crucial: Tell ESLint to lint Svelte files
+    ],
+    "prettier.documentSelectors": ["**/*.svelte"],      // Ensure Prettier formats Svelte files
+    "files.eol": "\n"                                // Recommended: Consistent line endings
+}
