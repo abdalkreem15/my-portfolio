@@ -4,7 +4,6 @@
     interface Skill {
         name: string;
         description: string;
-        // Now using a URL for the SVG icon, assuming it's in the static directory
         iconUrl: string;
     }
 
