@@ -8,10 +8,6 @@
         iconUrl: string;
     }
 
-    // Your list of skills, now referencing external SVG files
-    // IMPORTANT: Replace these placeholder URLs with the actual paths to your SVG files
-    // in your `static` directory. For example, if you put `html5.svg` in `static/svgs/`,
-    // the URL would be `/svgs/html5.svg`.
     const skills: Skill[] = [
         {
             name: 'HTML5',
