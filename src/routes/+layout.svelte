@@ -1,124 +1,102 @@
+<!-- src/routes/+layout.svelte -->
 <script lang="ts">
-	import '../global.css'; // Global styles
-	import Navbar from '$lib/components/Navbar.svelte';
-	import { onMount } from 'svelte';
-	import { activeSectionIdStore } from '$lib/stores/activeSectionStore'; // Import the global store
-	import { tick } from 'svelte'; // For ensuring DOM is ready before measuring elements
+    import '../app.css'; // Global CSS styles
+    import Navbar from '$lib/components/Navbar.svelte'; // Assuming Navbar.svelte
+    import { onMount } from 'svelte';
+    import { activeSectionIdStore } from '$lib/stores/activeSectionStore';
 
-	// Instead of receiving 'sections' from a 'data' prop, we define it directly here.
-	// This bypasses the 'export let data' line that was causing the compiler error.
-	const sections = [
-		{ id: 'hero', name: 'Home' },
-		{ id: 'about', name: 'About' },
-		{ id: 'skills', name: 'Skills' },
-		{ id: 'projects', name: 'Projects' },
-		{ id: 'contact', name: 'Contact' }
-	];
+    // IMPORTANT: Manually update this version string every time you deploy new changes.
+    // For example, change '2024-01-01.1' to '2024-01-01.2' or 'v1.0.1' to 'v1.0.2'
+    const APP_VERSION = '2025-06-13.1'; // Update this after each deployment!
 
-	// Expose the 'children' prop using $props() so it can be rendered by {@render children()}
-	let { children } = $props();
+    let sections = $state([
+        { id: 'hero', name: 'Home' },
+        { id: 'about', name: 'About' },
+        { id: 'skills', name: 'Skills' },
+        { id: 'projects', name: 'Projects' },
+        { id: 'contact', name: 'Contact' }
+    ]);
 
-	// --- Global Scroll Observation Logic ---
-	let resizeTimeout: ReturnType<typeof setTimeout>;
-	let scrollTimeout: ReturnType<typeof setTimeout>;
+    onMount(() => {
+        // --- Client-Side Cache Busting Logic ---
+        const lastKnownVersion = localStorage.getItem('app_version');
 
-	// Function to calculate the active section ID based on scroll position
-	function calculateActiveSection(sectionsData: { id: string; name: string }[]): string {
-		let activeId = '';
-		const navbarHeightEstimate = 60; // Approximate height of your Navbar
-		const activationOffset = 10; // Small offset below navbar for visual comfort
-		const activationThreshold = navbarHeightEstimate + activationOffset; // e.g., 70px from top of viewport
+        if (lastKnownVersion && lastKnownVersion !== APP_VERSION) {
+            // A new version of the app is detected, force a hard reload
+            console.log(`New app version detected: ${APP_VERSION}. Forcing reload from ${lastKnownVersion}.`);
+            window.location.reload(); // Forces a reload from the server (hard reload)
+        } else if (!lastKnownVersion) {
+            // First visit or app_version not set, set it
+            localStorage.setItem('app_version', APP_VERSION);
+        } else {
+            // Version matches, no action needed
+            console.log(`App version ${APP_VERSION} is up to date.`);
+        }
+        localStorage.setItem('app_version', APP_VERSION); // Always update to current version
 
-		// Iterate sections in forward order (from top to bottom of the page)
-		// The last section that meets the criteria will be selected.
-		for (const section of sectionsData) {
-			const element = document.getElementById(section.id);
-			if (element) {
-				const rect = element.getBoundingClientRect();
 
-				// A section is considered active if:
-				// 1. Its top edge has scrolled past or is at the activation threshold
-				//    (meaning it's now visually prominent at the top of the viewport)
-				// 2. Its bottom edge has not yet scrolled completely out of the viewport (i.e., it's still visible)
-				if (rect.top <= activationThreshold && rect.bottom > 0) {
-					activeId = section.id;
-					// DO NOT break here. This ensures that if multiple sections briefly overlap
-					// the threshold (e.g., a very short section), the last one encountered (which is
-					// visually lower on the page) will be chosen.
-				}
-			}
-		}
+        // --- Original Scroll Logic for Active Section Highlighting ---
+        let observer: IntersectionObserver;
 
-		// Edge case: If no section is clearly active (e.g., at the very top of the page,
-		// or just scrolled up past the first section), default to the first section.
-		if (!activeId && sectionsData.length > 0 && window.scrollY < activationThreshold) {
-			activeId = sectionsData[0].id;
-		}
+        const setupIntersectionObserver = () => {
+            const options = {
+                root: null, // Use the viewport as the root
+                rootMargin: '0px',
+                threshold: 0.5 // Trigger when 50% of the section is visible
+            };
 
-		return activeId;
-	}
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        // Update the active section store with the ID of the intersecting section
+                        activeSectionIdStore.set(entry.target.id);
+                    }
+                });
+            }, options);
 
-	// Effect to observe scroll and resize and update the global activeSectionIdStore
-	$effect(() => {
-		const updateActiveId = async () => {
-			await tick(); // Ensure DOM has settled before measuring
-			// 'sections' is now directly available in this component's scope
-			const newActiveId = calculateActiveSection(sections);
-			activeSectionIdStore.set(newActiveId); // Update the global store
-		};
+            // Observe each section
+            sections.forEach((section) => {
+                const element = document.getElementById(section.id);
+                if (element) {
+                    observer.observe(element);
+                }
+            });
+        };
 
-		const handleScroll = () => {
-			clearTimeout(scrollTimeout);
-			scrollTimeout = setTimeout(updateActiveId, 50); // Debounce scroll event
-		};
+        // Delay setup to ensure all content is rendered
+        // This is a common workaround for DOM elements not being ready immediately
+        // after onMount, especially for sections dynamically loaded or rendered.
+        setTimeout(setupIntersectionObserver, 100);
 
-		const handleResize = () => {
-			clearTimeout(resizeTimeout);
-			resizeTimeout = setTimeout(updateActiveId, 100); // Longer debounce for resize
-		};
-
-		window.addEventListener('scroll', handleScroll);
-		window.addEventListener('resize', handleResize);
-
-		// Cleanup: remove event listeners when component unmounts
-		return () => {
-			window.removeEventListener('scroll', handleScroll);
-			window.removeEventListener('resize', handleResize);
-			clearTimeout(scrollTimeout);
-			clearTimeout(resizeTimeout);
-		};
-	});
-
-	// Initial check on mount
-	onMount(() => {
-		// Perform initial calculation to set the active section when the page loads
-		tick().then(() => {
-			const initialActiveId = calculateActiveSection(sections);
-			activeSectionIdStore.set(initialActiveId);
-		});
-	});
+        return () => {
+            if (observer) {
+                observer.disconnect();
+            }
+        };
+    });
 </script>
 
-<div class="app-container">
-	<!-- Pass the sections array as a prop to Navbar -->
-	<!-- Navbar will now subscribe to activeSectionIdStore internally -->
-	<Navbar {sections} />
-
-	<!-- The <slot /> is deprecated in Svelte 5. Using {@render children()} instead. -->
-	{@render children()}
+<div class="layout-container">
+    <Navbar {sections} />
+    <!-- svelte-ignore slot_element_deprecated -->
+    <main>
+        <slot />
+    </main>
 </div>
 
 <style>
-	.app-container {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-	}
+    .layout-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: var(--color-background-main);
+        color: var(--color-text-main);
+        font-family: var(--font-family-base);
+    }
 
-	/* Ensure the body itself doesn't have default margins that conflict */
-	:global(body) {
-		margin: 0;
-		padding: 0;
-		overflow-x: hidden; /* Prevent horizontal scrollbar if elements go off-screen */
-	}
+    main {
+        flex-grow: 1;
+        /* Padding to prevent content from being hidden by fixed navbar, if any */
+        padding-top: var(--navbar-height, 0px); /* Adjust based on your Navbar's height */
+    }
 </style>
