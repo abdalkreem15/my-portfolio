@@ -16,7 +16,7 @@
         {
             name: 'CSS3',
             description: 'Styling engaging and responsive user interfaces.',
-            iconUrl: '/svgs/css.svg'
+            iconUrl: '/svgs/css3.svg'
         },
         {
             name: 'JavaScript',
