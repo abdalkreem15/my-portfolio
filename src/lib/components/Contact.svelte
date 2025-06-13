@@ -58,7 +58,7 @@
             // Hide the message after 2 seconds
             messageTimer = setTimeout(() => {
                 copyMessage = '';
-            }, 2000);
+            }, 1300);
         }
     }
 </script>
