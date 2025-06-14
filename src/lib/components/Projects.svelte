@@ -18,7 +18,7 @@
 			description:
 				'A responsive todo application featuring drag-and-drop reordering and persistent storage, built with Svelte and local storage.',
 			imageUrl: '/Imgs/todolist.png',
-			liveUrl: 'https://todo-list-tez9h.kinsta.page/',
+			liveUrl: 'https://todo-list-sepia-iota.vercel.app/',
 			githubUrl: 'https://github.com/abdalkreem15/todo-list'
 		},
 		{
@@ -27,13 +27,10 @@
 			description:
 				'A basic clock application for web browsers, demonstrating fundamental JavaScript logic and clean UI design.',
 			imageUrl: '/Imgs/clock.png',
-			liveUrl: 'https://clock-app-bpeu1.kinsta.page/',
+			liveUrl: 'https://clock-app-five-kappa.vercel.app/',
 			githubUrl: 'https://github.com/abdalkreem15/Clock-app'
 		}
 	];
-
-	// Removed all carousel-related state and functions (currentProjectIndex, projectsContainer, goToNextProject, etc.)
-	// Removed arrow SVG definitions
 </script>
 
 <div class="projects-section">
