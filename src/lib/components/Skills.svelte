@@ -44,7 +44,7 @@
 <div class="skills-section">
     <div class="container">
         <h2>My Skills</h2>
-        <p class="skills-intro">A growing toolkit for crafting modern web experiences.</p>
+        <p class="skills-intro">A growing toolkit for crafting modern web experiences and games.</p>
 
         <div class="skills-grid">
             {#each skills as skill (skill.name)}
