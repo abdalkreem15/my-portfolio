@@ -32,7 +32,12 @@
             name: 'Typescript',
             description: 'Its javascript but with types!',
             iconUrl: '/svgs/typescript.svg'
-        }
+        },
+        {
+			name: 'Game dev with Unity',
+			description: 'Developing interactive 2D and 3D games with the Unity engine and C#.',
+			iconUrl: '/svgs/unity.svg'
+		}
     ];
 </script>
 
