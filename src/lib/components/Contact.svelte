@@ -317,7 +317,7 @@
             font-size: 1.8rem;
         }
         .contact-details-grid {
-            flex-direction: column; /* Stack vertically on very small screens */
+            flex-direction: row; 
         }
         .icon-link {
             width: 60px;
