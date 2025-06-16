@@ -5,23 +5,29 @@
 		phone: '+20 100 471 6157'
 	};
 
-	const socialLinks = [
-		{
-			name: 'GitHub',
-			url: 'https://github.com/abdalkreem15',
-			iconSvgPath:
-				'M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.6.11 0-.258 0-.577v-2.222c-3.322.723-4.026-1.571-4.026-1.571-.54-.571-1.314-1.444-.093-1.428.113.008 1.406.49 2.146 1.157.64.606 1.405.908 2.302.908 0-.294.015-.53.155-.747-2.736-.31-5.61-1.363-5.61-6.046 0-1.334.475-2.427 1.25-3.278-.12-.31-.54-1.55 0-3.238 0 0 1.018-.328 3.33.626.96-.266 1.98-.399 3-.399s2.04.133 3 .399c2.312-.954 3.33-.626 3.33-.626.54 1.688.12 2.928 0 3.238.775.85 1.25 1.944 1.25 3.278 0 4.693-2.877 5.735-5.62 6.038.163.14.31.408.31.815v2.857c0 .319-.192.688 0 .577c4.766-1.587 8.203-6.085 8.203-11.387c0-6.627-5.372-12-12-12z',
-			iconViewBox: '0 0 24 24'
-		},
-		{
-			name: 'Facebook',
-			url: 'https://www.facebook.com/abdalkareem.kafoury/',
-			iconSvgPath:
-				'M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.243-1.333 1.153-1.333h2.847v-5h-3.998c-4.145 0-5.002 3.001-5.002 4.987v2.013z',
-			iconViewBox: '0 0 24 24'
-		}
-		// Add more social media links here as needed
-	];
+    interface SocialLink {
+        name: string;
+        url: string;
+        iconUrl: string;
+    }
+
+	const socialLinks: SocialLink[] = [
+        {
+            name: 'GitHub',
+            url: 'https://github.com/abdalkreem15',
+            iconUrl: '/svgs/github.svg'
+        },
+        {
+            name: 'Facebook',
+            url: 'https://www.facebook.com/abdalkareem.kafoury/',
+            iconUrl: '/svgs/facebook.svg'
+        },
+        {
+            name: 'Itch-io',
+            url: 'https://desert-coder.itch.io/',
+            iconUrl: '/svgs/itchdotio.svg'
+        }
+    ];
 
 	let copyMessage = $state(''); // Reactive state for the copy feedback message
     let messageTimer: ReturnType<typeof setTimeout>; // Timer for hiding the message
@@ -112,9 +118,17 @@
         <div class="social-links">
             {#each socialLinks as link (link.name)}
                 <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.name} class="social-icon-link">
-                    <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" {...link.iconViewBox && { viewBox: link.iconViewBox }} fill="currentColor">
-                        <path d="{link.iconSvgPath}" />
-                    </svg>
+                    <!-- Use img tag for external SVGs -->
+                    <img
+                        src={link.iconUrl}
+                        alt="{link.name} icon"
+                        class="social-svg-image"
+                        onerror={(e) => {
+                            const imgElement = e.currentTarget as HTMLImageElement;
+                            imgElement.onerror = null;
+                            imgElement.src = 'https://placehold.co/48x48/44475a/f8f8f2?text=SVG+Error'; // Fallback
+                        }}
+                    />
                 </a>
             {/each}
         </div>
@@ -273,11 +287,6 @@
         background-color: rgba(97, 218, 251, 0.1); /* Slight highlight on hover */
     }
 
-    .social-icon {
-        width: 32px; /* Inner SVG icon size */
-        height: 32px;
-    }
-
     /* Responsive adjustments */
     @media (max-width: 768px) {
         h2 {
@@ -306,10 +315,6 @@
             width: 50px;
             height: 50px;
         }
-        .social-icon {
-            width: 28px;
-            height: 28px;
-        }
     }
 
     @media (max-width: 480px) {
@@ -330,10 +335,6 @@
         .social-icon-link {
             width: 45px;
             height: 45px;
-        }
-        .social-icon {
-            width: 24px;
-            height: 24px;
         }
         .copy-feedback-message {
             padding: var(--spacing-xs) var(--spacing-md);

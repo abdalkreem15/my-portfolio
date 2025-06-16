@@ -1,10 +1,10 @@
 <div class="hero-section">
     <div class="container">
-        <h1>Hi, I'm Abdalkareem</h1>
-        <p class="tagline">Frontend Developer | Game Developer | Crafting engaging web experiences.</p>
+        <h1>Hi, I'm Abdalkareem Alkafoury</h1>
+        <p class="tagline">Frontend Developer | Game Developer | Crafting engaging web experiences and fun games.</p>
         <p class="description">
             Passionate about building intuitive and high-performance user interfaces.
-            I transform ideas into responsive and beautiful web applications, including interactive games.
+            I transform ideas into responsive and beautiful web applications, and interactive games.
         </p>
         <button
             onclick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
