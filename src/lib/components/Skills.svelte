@@ -37,7 +37,12 @@
 			name: 'Game dev with Unity',
 			description: 'Developing interactive 2D and 3D games with the Unity engine and C#.',
 			iconUrl: '/svgs/unity.svg'
-		}
+		},
+        {
+			name: 'Game dev with Godot',
+			description: 'Developing interactive 2D and 3D games with the Godot engine and GD-script.',
+			iconUrl: '/svgs/Godot.svg'
+		},
     ];
 </script>
 
