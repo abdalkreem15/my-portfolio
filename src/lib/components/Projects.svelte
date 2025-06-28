@@ -167,7 +167,7 @@
                                     <div class="project-links">
                                         {#if project.liveUrl}
                                             <a href="{project.liveUrl}" target="_blank" rel="noopener noreferrer" class="btn-link">
-                                                Get The Game
+                                                game itch.io page
                                             </a>
                                         {/if}
                                         {#if project.githubUrl}
