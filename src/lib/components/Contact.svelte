@@ -18,15 +18,10 @@
             iconUrl: '/svgs/github.svg'
         },
         {
-            name: 'Facebook',
-            url: 'https://www.facebook.com/abdalkareem.kafoury/',
-            iconUrl: '/svgs/facebook.svg'
-        },
-        {
             name: 'Itch-io',
             url: 'https://desert-coder.itch.io/',
             iconUrl: '/svgs/itchdotio.svg'
-        }
+        },
     ];
 
 	let copyMessage = $state(''); // Reactive state for the copy feedback message
