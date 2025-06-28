@@ -8,6 +8,7 @@
         imageUrl: string; // This will be the path to your project's image
         liveUrl?: string; // Optional link to a live demo of the project
         githubUrl?: string; // Optional link to the project's GitHub repository
+        download?: string; // optional download
     }
 
     // Now, we're setting up the structure for how your projects are categorized.
@@ -70,6 +71,7 @@
                     description: 'this is a simple platformer game I am working on using the Godot Game Engine, the beta version is out on itch.io',
                     imageUrl: '/Imgs/Larry.png',
                     liveUrl: 'https://desert-coder.itch.io/larrys-adventure-beta',
+                    download: '/downloadable/Larrys-adventure-Beta.zip'
                 }
             ]
         }
@@ -172,6 +174,9 @@
                                             <a href="{project.githubUrl}" target="_blank" rel="noopener noreferrer" class="btn-link">
                                                 GitHub Repo
                                             </a>
+                                        {/if}
+                                        {#if project.download}
+                                            <a href="{project.download}" download class="btn-link btn-download">Download Game</a>
                                         {/if}
                                     </div>
                                 </div>
