@@ -71,7 +71,6 @@
                     description: 'this is a simple platformer game I am working on using the Godot Game Engine, the beta version is out on itch.io',
                     imageUrl: '/Imgs/Larry.png',
                     liveUrl: 'https://desert-coder.itch.io/larrys-adventure-beta',
-                    download: '/downloadable/Larrys-adventure-Beta.zip'
                 }
             ]
         }
