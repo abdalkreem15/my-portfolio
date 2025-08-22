@@ -1,7 +1,7 @@
 <!-- src/lib/components/Contact.svelte -->
 <script lang="ts">
 	const contactInfo = {
-		email: 'kimokafoury@gmail.com',
+		email: 'abdalkareemalkafoury@gmail.com',
 		phone: '+20 100 471 6157'
 	};
 
